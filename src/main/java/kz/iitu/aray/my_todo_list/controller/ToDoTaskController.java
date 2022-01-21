@@ -5,6 +5,8 @@ import kz.iitu.aray.my_todo_list.service.ToDoTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/todo")
 public class ToDoTaskController {
@@ -12,14 +14,19 @@ public class ToDoTaskController {
     @Autowired
     private ToDoTaskService toDoTaskService;
 
+    @GetMapping("/user/{userId}")
+    public List<ToDoTask> getUserToDoTaskList(@PathVariable Long userId) {
+        return toDoTaskService.findByUserId(userId);
+    }
+
     @GetMapping("/{id}")
     public ToDoTask getToDoTask(@PathVariable Long id) {
         return toDoTaskService.getToDoTask(id);
     }
 
-    @PostMapping("")
-    public void createToDoTask(@RequestBody ToDoTask toDoTask) {
-        toDoTaskService.createToDoTask(toDoTask);
+    @PostMapping("/{userId}")
+    public void createToDoTask(@RequestBody ToDoTask toDoTask, @PathVariable  Long userId) {
+        toDoTaskService.createToDoTask(toDoTask, userId);
     }
 
     @PutMapping("/{id}")

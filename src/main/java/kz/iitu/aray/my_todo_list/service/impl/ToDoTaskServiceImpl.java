@@ -1,15 +1,21 @@
 package kz.iitu.aray.my_todo_list.service.impl;
 
 import kz.iitu.aray.my_todo_list.model.ToDoTask;
+import kz.iitu.aray.my_todo_list.model.User;
 import kz.iitu.aray.my_todo_list.repository.ToDoTaskRepository;
 import kz.iitu.aray.my_todo_list.service.ToDoTaskService;
+import kz.iitu.aray.my_todo_list.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ToDoTaskServiceImpl implements ToDoTaskService {
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private ToDoTaskRepository toDoTaskRepository;
@@ -20,7 +26,9 @@ public class ToDoTaskServiceImpl implements ToDoTaskService {
     }
 
     @Override
-    public void createToDoTask(ToDoTask toDoTask) {
+    public void createToDoTask(ToDoTask toDoTask, Long userId) {
+        User user = userService.getUser(userId);
+        toDoTask.setUser(user);
         toDoTaskRepository.save(toDoTask);
     }
 
@@ -56,5 +64,10 @@ public class ToDoTaskServiceImpl implements ToDoTaskService {
             dbToDoTask.setIsDone(true);
             toDoTaskRepository.saveAndFlush(dbToDoTask);
         }
+    }
+
+    @Override
+    public List<ToDoTask> findByUserId(Long userId) {
+        return toDoTaskRepository.findByUserId(userId);
     }
 }

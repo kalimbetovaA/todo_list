@@ -1,5 +1,6 @@
 package kz.iitu.aray.my_todo_list.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -20,5 +21,8 @@ public class ToDoTask {
     private Boolean isDone = false;
     private Date createdAt = new Date();
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
+    private User user;
 }
